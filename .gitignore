@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+logs/
+airflow/logs/
+.streamlit/secrets.toml
+*.pem
+*.key
+Thumbs.db
+.DS_Store

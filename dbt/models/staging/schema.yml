@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: stg_suppliers
+    columns:
+      - name: supplier_id
+        data_tests:
+          - unique
+          - not_null
+      - name: supplier_name
+        data_tests:
+          - not_null
+
+  - name: stg_products
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+      - name: unit_cost
+        data_tests:
+          - not_null
+
+  - name: stg_purchase_orders
+    columns:
+      - name: purchase_order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: supplier_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_suppliers')
+                field: supplier_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - PLACED
+                  - PARTIALLY_RECEIVED
+                  - RECEIVED
+                  - CANCELLED
+
+  - name: stg_shipments
+    columns:
+      - name: shipment_id
+        data_tests:
+          - unique
+          - not_null
+      - name: purchase_order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_purchase_orders')
+                field: purchase_order_id
+      - name: status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - IN_TRANSIT
+                  - DELIVERED
+
+  - name: stg_inventory
+    columns:
+      - name: inventory_id
+        data_tests:
+          - unique
+          - not_null
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+      - name: warehouse_code
+        data_tests:
+          - not_null

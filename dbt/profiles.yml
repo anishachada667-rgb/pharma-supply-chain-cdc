@@ -1,0 +1,13 @@
+pharma_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DBT_HOST', '127.0.0.1') }}"
+      port: "{{ env_var('DBT_PORT', '5434') | int }}"
+      user: warehouse
+      password: "{{ env_var('DBT_ENV_SECRET_WAREHOUSE_PASSWORD') }}"
+      dbname: pharma_warehouse
+      schema: analytics
+      threads: 2
+      connect_timeout: 10

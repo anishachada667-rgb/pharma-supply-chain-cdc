@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: cdc
+    schema: staging
+    description: "Current source records maintained by the CDC consumer."
+    tables:
+      - name: current_records
+        description: "Latest record state, including delete markers."

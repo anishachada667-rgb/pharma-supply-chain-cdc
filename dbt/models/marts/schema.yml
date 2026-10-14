@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: fct_purchase_orders
+    description: "One row per purchase-order product line."
+    columns:
+      - name: purchase_order_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: mart_supplier_performance
+    description: "Delivery performance using current supplier attributes."
+    columns:
+      - name: supplier_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: mart_inventory_risk
+    description: "Inventory risk at product-and-warehouse grain."
+    columns:
+      - name: inventory_id
+        data_tests:
+          - unique
+          - not_null
+      - name: stock_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - OUT_OF_STOCK
+                  - LOW_STOCK
+                  - SUFFICIENT

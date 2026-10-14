@@ -1,0 +1,46 @@
+name: pharma-supply-chain-cdc
+
+services:
+  source-db:
+    image: postgres:17
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
+      - -c
+      - max_replication_slots=10
+      - -c
+      - max_wal_senders=10
+    environment:
+      POSTGRES_DB: pharma_source
+      POSTGRES_USER: pharma
+      POSTGRES_PASSWORD: ${SOURCE_DB_PASSWORD:?Set SOURCE_DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - source_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharma -d pharma_source"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  warehouse-db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: pharma_warehouse
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: ${WAREHOUSE_DB_PASSWORD:?Set WAREHOUSE_DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U warehouse -d pharma_warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  source_data:
+  warehouse_data:

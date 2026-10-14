@@ -1,0 +1,20 @@
+name: pharma_analytics
+version: "1.0.0"
+config-version: 2
+
+profile: pharma_analytics
+
+model-paths: ["models"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+clean-targets:
+  - target
+  - dbt_packages
+
+models:
+  pharma_analytics:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

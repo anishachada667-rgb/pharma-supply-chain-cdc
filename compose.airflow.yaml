@@ -1,0 +1,22 @@
+services:
+  airflow:
+    image: pharma-airflow:local
+    command: standalone
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      DBT_HOST: warehouse-db
+      DBT_PORT: "5432"
+      DBT_ENV_SECRET_WAREHOUSE_PASSWORD: ${WAREHOUSE_DB_PASSWORD:?Set WAREHOUSE_DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - airflow_home:/opt/airflow
+      - ./airflow/dags:/opt/airflow/dags:ro
+      - ./dbt:/opt/airflow/project/dbt
+    depends_on:
+      warehouse-db:
+        condition: service_healthy
+
+volumes:
+  airflow_home:
